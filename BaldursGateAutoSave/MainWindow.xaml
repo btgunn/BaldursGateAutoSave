@@ -1,8 +1,68 @@
-﻿<Window x:Class="BaldursGateAutoSave.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BaldursGateAutoSave"
+        xmlns:System="clr-namespace:System;assembly=System.Runtime" x:Class="BaldursGateAutoSave.MainWindow"
         mc:Ignorable="d"
-        Title="BG3 AutoQuickSave" Height="256" Width="256"/>
+        Title="BG3 AutoQuickSave" Height="256" Width="256">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="44*"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="41*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28*"/>
+            <RowDefinition Height="24.275"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="29.291"/>
+            <RowDefinition Height="22*"/>
+            <RowDefinition Height="101*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="textBlockInstructions" TextWrapping="Wrap" Text="Enter a time in minutes for auto saves" Margin="10,2,-10,3" Grid.ColumnSpan="3" Grid.Row="1"/>
+        <Grid Margin="0,6,0,3" Grid.Row="2" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80*"/>
+                <ColumnDefinition Width="18"/>
+                <ColumnDefinition Width="48*"/>
+                <ColumnDefinition Width="15*"/>
+                <ColumnDefinition Width="19"/>
+                <ColumnDefinition Width="76*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Column="2" Grid.ColumnSpan="2" Margin="0,0,1,0" Grid.RowSpan="2">
+                <TextBox x:Name="textBoxInterval" TextWrapping="Wrap" Text="15" TextChanged="TextBoxInterval_TextChanged"/>
+            </Grid>
+            <Button x:Name="buttonIncrement" Content="^" Grid.Column="3" Margin="0,0,1,0" RenderTransformOrigin="0.5,0.5" Click="ButtonIncrement_Click">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-180.176"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+            <Button x:Name="buttonDecrement" Content="^" VerticalAlignment="Center" Grid.Column="3" Margin="0,0,1,0" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Click="ButtonDecrement_Click" Height="12" >
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="180.322"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+        </Grid>
+        <Button x:Name="buttonStartStop" Content="Start" HorizontalAlignment="Center" Grid.Row="3" RenderTransformOrigin="-0.076,0.252" Width="86" Height="20" VerticalAlignment="Center" Grid.Column="1" Click="ButtonStartStop_Click"/>
+        <TextBlock x:Name="tbRunning" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="4" TextWrapping="Wrap" Text="Not Running" VerticalAlignment="Center" Width="77" Foreground="#FFEA1919"/>
+        <TextBlock x:Name="tbInfoGameStatus" HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" Text="Game Status" VerticalAlignment="Center"/>
+        <TextBlock x:Name="tbInfoLastSave" HorizontalAlignment="Left" Grid.Row="5" TextWrapping="Wrap" Text="Last Save" VerticalAlignment="Top" Margin="10,2,0,0"/>
+        <TextBox x:Name="tbLastSave" Grid.Column="1" HorizontalAlignment="Center" Margin="0,1,0,0" Grid.Row="5" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="99" IsReadOnly="True"/>
+    </Grid>
+</Window>
