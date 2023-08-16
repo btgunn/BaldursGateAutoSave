@@ -18,8 +18,8 @@
             <RowDefinition Height="24.275"/>
             <RowDefinition Height="35"/>
             <RowDefinition Height="29.291"/>
-            <RowDefinition Height="22*"/>
-            <RowDefinition Height="101*"/>
+            <RowDefinition Height="37*"/>
+            <RowDefinition Height="86*"/>
         </Grid.RowDefinitions>
         <TextBlock x:Name="textBlockInstructions" TextWrapping="Wrap" Text="Enter a time in minutes for auto saves" Margin="10,2,-10,3" Grid.ColumnSpan="3" Grid.Row="1"/>
         <Grid Margin="0,6,0,3" Grid.Row="2" Grid.ColumnSpan="3">
@@ -60,9 +60,9 @@
             </Button>
         </Grid>
         <Button x:Name="buttonStartStop" Content="Start" HorizontalAlignment="Center" Grid.Row="3" RenderTransformOrigin="-0.076,0.252" Width="86" Height="20" VerticalAlignment="Center" Grid.Column="1" Click="ButtonStartStop_Click"/>
-        <TextBlock x:Name="tbRunning" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="4" TextWrapping="Wrap" Text="Not Running" VerticalAlignment="Center" Width="77" Foreground="#FFEA1919"/>
-        <TextBlock x:Name="tbInfoGameStatus" HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" Text="Game Status" VerticalAlignment="Center"/>
-        <TextBlock x:Name="tbInfoLastSave" HorizontalAlignment="Left" Grid.Row="5" TextWrapping="Wrap" Text="Last Save" VerticalAlignment="Top" Margin="10,2,0,0"/>
-        <TextBox x:Name="tbLastSave" Grid.Column="1" HorizontalAlignment="Center" Margin="0,1,0,0" Grid.Row="5" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="99" IsReadOnly="True"/>
+        <Label x:Name="lblRunning" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="4" Content="Not Running" VerticalAlignment="Center" Foreground="#FFEA1919"/>
+        <TextBlock x:Name="tbInfoGameStatus" HorizontalAlignment="Center" Grid.Row="4" TextWrapping="Wrap" Text="Game Status" VerticalAlignment="Center" Height="16" Width="67"/>
+        <TextBlock x:Name="tbInfoLastSave" HorizontalAlignment="Left" Grid.Row="5" TextWrapping="Wrap" Text="Last Save" VerticalAlignment="Top" Margin="10,2,0,0" Height="16" Width="49"/>
+        <TextBox x:Name="tbLastSave" Grid.Column="1" HorizontalAlignment="Center" Margin="0,1,0,0" Grid.Row="5" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="99" IsReadOnly="True" Height="18"/>
     </Grid>
 </Window>

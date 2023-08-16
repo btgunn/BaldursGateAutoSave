@@ -1,6 +1,5 @@
 ﻿using AutoIt;
 using System;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -11,11 +10,13 @@ namespace BaldursGateAutoSave
     /// </summary>
     public partial class MainWindow : Window
     {
-        private int saveInterval = 15;
+        private int saveInterval = 15; //Default save interval 15 minutes
         private DispatcherTimer? timer;
-        private bool IsRunning = false;
+        private bool IsRunning = false; //Flag for determining if actively auto-saving
         private IntPtr gameProcess = IntPtr.Zero;
         private DateTime lastSaveTime = DateTime.MinValue;
+        private ProcessWatcher? procWatch;
+        private string gameName = "bg3";
         public MainWindow()
         {
             InitializeComponent();
@@ -37,6 +38,7 @@ namespace BaldursGateAutoSave
             textBoxInterval.Text = saveInterval.ToString();
         }
 
+        //On time interval change, verify positive integer and update control
         private void TextBoxInterval_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (int.TryParse(textBoxInterval.Text, out int enteredValue))
@@ -47,7 +49,7 @@ namespace BaldursGateAutoSave
                     return;
                 }
             }
-            
+
             UpdateIntervalTextBox();
         }
 
@@ -55,28 +57,58 @@ namespace BaldursGateAutoSave
         {
             if (!IsRunning)
             {
-                //start auto save (press F5) thread/timer
-                StartSaving();
-                textBoxInterval.IsEnabled = false;
-                buttonStartStop.Content = "Stop";
-                IsRunning = true;
+                //start process detection and saving
+                StartProcessCheck();
+
+                //Disable changing of interval while saving thread is running
+                DisableUI(true);
             }
             else
             {
-                //Stop auto saving
-                StopSaving();
-                textBoxInterval.IsEnabled = true;
-                buttonStartStop.Content = "Start";
-                IsRunning = false;
+                //Signal process thread to end
+                StopProcessCheck();
 
+                //Re-enable interaction with UI
+                DisableUI(false);
+            }
+        }
+        private void DisableUI(bool disable)
+        {
+            if (disable)
+            {
+                buttonStartStop.Content = "Stop";
+            }
+            else
+            {
+                buttonStartStop.Content = "Start";
+            }
+
+            textBoxInterval.IsEnabled = !disable;
+            buttonIncrement.IsEnabled = !disable;
+            buttonDecrement.IsEnabled = !disable;
+            IsRunning = disable;
+
+        }
+
+        private void StartProcessCheck()
+        {
+            procWatch = new ProcessWatcher(this, gameName);
+            procWatch.Start();
+        }
+        private void StopProcessCheck()
+        {
+            if (procWatch != null)
+            {
+                procWatch.Stop();
             }
         }
 
-        private void StartSaving()
+        public void StartSaving()
         {
             timer = new DispatcherTimer();
-            
-            gameProcess = GetGameHWND("bg3"); //Currently hardcoded to baldur's gate 3
+
+            //Retrieve window handle for game process
+            gameProcess = ProcessWatcher.GetGameHWND(gameName); //Currently hardcoded to baldur's gate 3
 
             if (gameProcess != nint.Zero)
             {
@@ -85,7 +117,7 @@ namespace BaldursGateAutoSave
                 timer.Start();
             }
         }
-        private void StopSaving()
+        public void StopSaving()
         {
             if (timer != null)
             {
@@ -96,7 +128,8 @@ namespace BaldursGateAutoSave
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-
+            //AutoIt and autohotkey seem to be the only methods of sending keystrokes to Baldur's gate 3
+            //Should work in most games without cheat detection.
             AutoItX.WinActivate(gameProcess);
             AutoItX.Send("{F5}");
 
@@ -107,19 +140,5 @@ namespace BaldursGateAutoSave
             tbLastSave.Text = $"{lastSaveTime:HH:mm:ss}";
         }
 
-        //Retrieve hWND for partial game title, used with AutoIt to set focus and send input
-        private IntPtr GetGameHWND(string gameName)
-        {
-            Process[] procs = Process.GetProcesses();
-            foreach (Process proc in procs)
-            {
-                if (proc.ProcessName.Contains(gameName))
-                {
-                    return proc.MainWindowHandle;
-                }
-            }
-
-            return IntPtr.Zero;
-        }
     }
 }
